@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-
+import numpy as np
 
 
 def verify_model():
@@ -21,9 +21,18 @@ def embed_text(text):
 class SemanticSearch:
     def __init__(self):
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.embeddings = None
+        self.documents = None
+        self.document_map = {}
+
     
     def generate_embedding(self, text):
         if not text.strip():
             raise ValueError("Input text cannot be empty.")
         return self.model.encode([text])[0]
     
+    def build_embeddings(self, documents):
+        self.documents = documents
+        for idx, doc in enumerate(documents, start=1):
+            self.document_map[idx] = doc
+            
